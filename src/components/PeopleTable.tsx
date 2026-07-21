@@ -38,11 +38,13 @@ export const PeopleTable = ({ people, selectedSlug }: Props) => {
         <tr>
           <th onClick={() => changeSorting('name')}>
             Name{' '}
-            {currentSort === 'name'
-              ? currentOrder === 'asc'
-                ? '▲'
-                : '▼'
-              : '↕'}
+            <span aria-hidden="true">
+              {currentSort === 'name'
+                ? currentOrder === 'asc'
+                  ? '▲'
+                  : '▼'
+                : '↕'}
+            </span>
           </th>
           <th onClick={() => changeSorting('sex')}>
             Sex{' '}
