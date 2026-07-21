@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom';
 import { Person } from '../types';
 import { PersonLink } from './PersonLink';
 
@@ -7,6 +8,27 @@ type Props = {
 };
 
 export const PeopleTable = ({ people, selectedSlug }: Props) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentSort = searchParams.get('sort');
+  const currentOrder = searchParams.get('order');
+
+  const changeSorting = (field: string) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (currentSort !== field) {
+      params.set('sort', field);
+      params.set('order', 'asc');
+    } else if (currentOrder === 'asc') {
+      params.set('order', 'desc');
+    } else {
+      params.delete('order');
+      params.delete('sort');
+    }
+
+    setSearchParams(params);
+  };
+
   return (
     <table
       data-cy="peopleTable"
@@ -14,10 +36,38 @@ export const PeopleTable = ({ people, selectedSlug }: Props) => {
     >
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Sex</th>
-          <th>Born</th>
-          <th>Died</th>
+          <th onClick={() => changeSorting('name')}>
+            Name{' '}
+            {currentSort === 'name'
+              ? currentOrder === 'asc'
+                ? '▲'
+                : '▼'
+              : '↕'}
+          </th>
+          <th onClick={() => changeSorting('sex')}>
+            Sex{' '}
+            {currentSort === 'sex'
+              ? currentOrder === 'asc'
+                ? '▲'
+                : '▼'
+              : '↕'}
+          </th>
+          <th onClick={() => changeSorting('born')}>
+            Born{' '}
+            {currentSort === 'born'
+              ? currentOrder === 'asc'
+                ? '▲'
+                : '▼'
+              : '↕'}
+          </th>
+          <th onClick={() => changeSorting('died')}>
+            Died{' '}
+            {currentSort === 'died'
+              ? currentOrder === 'asc'
+                ? '▲'
+                : '▼'
+              : '↕'}
+          </th>
           <th>Mother</th>
           <th>Father</th>
         </tr>

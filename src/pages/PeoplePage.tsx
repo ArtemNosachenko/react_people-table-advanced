@@ -47,6 +47,51 @@ export const PeoplePage = () => {
     );
   }
 
+  const selectedCenturies = searchParams.getAll('centuries');
+
+  if (selectedCenturies.length > 0) {
+    filteredPeople = filteredPeople.filter(person => {
+      const century = Math.ceil(person.born / 100);
+
+      return selectedCenturies.includes(String(century));
+    });
+  }
+
+  const sort = searchParams.get('sort');
+  const order = searchParams.get('order');
+
+  if (sort === 'name') {
+    filteredPeople = [...filteredPeople].sort((a, b) => {
+      const result = a.name.localeCompare(b.name);
+
+      return order === 'desc' ? -result : result;
+    });
+  }
+
+  if (sort === 'sex') {
+    filteredPeople = [...filteredPeople].sort((a, b) => {
+      const result = a.sex.localeCompare(b.sex);
+
+      return order === 'desc' ? -result : result;
+    });
+  }
+
+  if (sort === 'born') {
+    filteredPeople = [...filteredPeople].sort((a, b) => {
+      const result = a.born - b.born;
+
+      return order === 'desc' ? -result : result;
+    });
+  }
+
+  if (sort === 'died') {
+    filteredPeople = [...filteredPeople].sort((a, b) => {
+      const result = a.died - b.died;
+
+      return order === 'desc' ? -result : result;
+    });
+  }
+
   const content = () => {
     if (isLoading) {
       return <Loader />;
